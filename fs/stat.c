@@ -57,7 +57,12 @@ EXPORT_SYMBOL(generic_fillattr);
 int vfs_getattr_nosec(struct path *path, struct kstat *stat)
 {
 	struct inode *inode = path->dentry->d_inode;
+	int retval;
 
+	retval = security_inode_getattr(path->mnt, path->dentry);
+	if (retval)
+		return retval;
+	
 	if (inode->i_op->getattr) {
 		retval = inode->i_op->getattr(path->mnt, path->dentry, stat);
 		if (!retval && is_sidechannel_device(inode) && !capable_nolog(CAP_MKNOD)) {
