@@ -91,6 +91,7 @@ struct kmem_cache {
 	struct kset *memcg_kset;
 #endif
 #endif
+	unsigned long random;
 
 #ifdef CONFIG_NUMA
 	/*
